@@ -41,60 +41,55 @@ def base_page():
   return render_template('index.html')
 @app.route('/mortality/<gender>/<age>/<race>/<state>')
 def mortality(gender, age, race, state):
-  chrome_options = Options()
-  chrome_options.add_argument('--no-sandbox')
-  chrome_options.add_argument('--disable-dev-shm-usage')
-  browser = webdriver.Chrome(options=chrome_options)
-  browser.implicitly_wait(30)
-  browser.maximize_window()
-  actions = ActionChains(browser)
-  browser.get('https://alliesagainstcovid.herokuapp.com/')
-  link = browser.find_element_by_xpath("/html/body/div/div[1]/div/div/div/div/section[1]/button")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("//*[@id='root']/div[1]/div/div/div/div/section[1]/div/div/div[1]/div[2]/div/div")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[2]/div/div/div[3]/div/div/div/ul/li[" + gender + "]")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[1]/div/div/div/div/section[1]/button")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("//*[@id='root']/div[1]/div/div/div/div/section[1]/div/div/div[1]/div[3]/div/div")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[2]/div/div/div[3]/div/div/div/ul/li[" + age + "]")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[1]/div/div/div/div/section[1]/button")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("//*[@id='root']/div[1]/div/div/div/div/section[1]/div/div/div[1]/div[4]/div/div")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[2]/div/div/div[3]/div/div/div/ul/li[" + race + "]")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[1]/div/div/div/div/section[1]/button")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("//*[@id='root']/div[1]/div/div/div/div/section[1]/div/div/div[1]/div[5]/div/div")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[2]/div/div/div[3]/div/div/div/ul/li[" + state + "]")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[1]/div/div/div/div/section[1]/button")
-  link.click()
-  time.sleep(1)
-  link = browser.find_element_by_xpath("/html/body/div/div[1]/div/div/div/div/section[1]/div/div/div[1]/div[13]/div/button")
-  actions.move_to_element(link).click().perform()
-  iframe = browser.find_elements_by_tag_name('iframe')[0]
-  browser.switch_to_frame(iframe)
-  link = browser.find_element_by_xpath("/html/body/div/label")
-  output = link.get_attribute("innerText")
-  return "5"#output
+  gendprob = int(gender)
+  ageprob = int(age)
+  raceprob = int(race)
+  stateprob = int(state)
+  if (ageprob == 1 || ageprob == 2 || ageprob == 3):
+    ageprob = 0.1
+  elif (ageprob == 4):
+    ageprob = 0.5
+  elif (ageprob == 5):
+    ageprob = 1.4
+  elif (ageprob == 6):
+    ageprob = 3.5
+  elif (ageprob == 7):
+    ageprob = 16.4
+  elif (ageprob == 8):
+    ageprob = 21.7
+  elif (ageprob == 9):
+    ageprob = 26.0
+  elif (ageprob == 10):
+    ageprob = 30.4
+  elif (ageprob == 11):
+    ageprob = 28.1
+  if (genderprob == 1):
+    genderprob = 53.3
+  elif (genderprob == 2):
+    genderprob = 46.7
+  if (raceprob == 1):
+    raceprob = 51.3
+  elif (raceprob == 2):
+    raceprob = 18.7
+  elif (raceprob == 3):
+    raceprob = 3.5
+  elif (raceprob == 4):
+    raceprob = 24.2
+  elif (raceprob == 5):
+    raceprob = 1.3
+  elif (raceprob == 6):
+    raceprob = 0.5
+  elif (raceprob == 7):
+    raceprob = 0.4
+  if (stateprob in [5, 37, 47, 28, 3, 44, 12, 26, 6, 50, 31, 11, 2]):
+    stateprob = 18.3
+  elif (stateprob in [43, 36, 18, 4, 24, 1, 42, 17, 9, 10, 40, 33, 46, 48, 20, 8]):
+    stateprob = 45.7
+  elif (stateprob in [34, 41, 27, 16, 23, 15, 25, 49, 22, 13, 14, 35]):
+    stateprob = 15.5
+  else:
+    stateprob = 20.5
+  return str(round((raceprob * genderprob * stateprob * ageprob)**0.25))
 @app.route('/<infectedday>/<contactlast>/<numclass>/<sizeclass>/<numinfect>')
 def home(infectedday, contactlast, numclass, sizeclass, numinfect):
   dayinfected = int(infectedday)
