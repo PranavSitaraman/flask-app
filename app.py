@@ -41,7 +41,7 @@ def base_page():
   return render_template('index.html')
 @app.route('/mortality/<gender>/<age>/<race>/<state>')
 def mortality(gender, age, race, state):
-  gendprob = int(gender)
+  genderprob = int(gender)
   ageprob = int(age)
   raceprob = int(race)
   stateprob = int(state)
