@@ -45,7 +45,7 @@ def mortality(gender, age, race, state):
   ageprob = int(age)
   raceprob = int(race)
   stateprob = int(state)
-  if (ageprob == 1 || ageprob == 2 || ageprob == 3):
+  if (ageprob == 1 or ageprob == 2 or ageprob == 3):
     ageprob = 0.1
   elif (ageprob == 4):
     ageprob = 0.5
